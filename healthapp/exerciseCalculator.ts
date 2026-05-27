@@ -1,3 +1,13 @@
+const parseData = (args: string[]): number[] => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  const arr = args.slice(2)
+  if (arr.filter(x => !isNaN(Number(x))).length < arr.length) {
+    throw new Error('Provided values were not numbers!');
+  } else {
+    return args.slice(2).map(x => Number(x))
+  }
+}
+
 interface Output {
   periodLength: number;
   trainingDays: number;
@@ -49,4 +59,15 @@ const calculateExercises = (data: number[], target: number): Output => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const data = parseData(process.argv)
+  const target: number = data.shift() ?? 0
+  const res = calculateExercises(data, target)
+  console.log(res)
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message
+  }
+  console.log(errorMessage)
+}
