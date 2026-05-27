@@ -1,12 +1,4 @@
-const parseData = (args: string[]): number[] => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  const arr = args.slice(2)
-  if (arr.filter(x => !isNaN(Number(x))).length < arr.length) {
-    throw new Error('Provided values were not numbers!');
-  } else {
-    return args.slice(2).map(x => Number(x))
-  }
-}
+import { parseData, feedback, calculateRating } from "./utils.ts";
 
 interface Output {
   periodLength: number;
@@ -17,28 +9,6 @@ interface Output {
   target: number;
   average: number;
 }
-
-const feedback = (rating: number): string => {
-  switch (rating) {
-    case 1:
-      return "go jogging";
-    case 2:
-      return "not too bad but could be better";
-    case 3:
-      return "good job";
-    default:
-      throw new Error("Unknown rating");
-  };
-};
-
-const calculateRating = (avg: number, target: number): number => {
-  if (avg > target) {
-    return 3;
-  } else if (avg / target > 0.5) {
-    return 2;
-  }
-  return 1;
-};
 
 const calculateExercises = (data: number[], target: number): Output => {
   const periodLength = data.length;
