@@ -1,32 +1,54 @@
-import express from 'express';
-import { calculateBmi } from './bmiCalculator.ts';
-
+import express from "express";
+import { calculateBmi } from "./bmiCalculator.ts";
+import { calculateExercises } from "./exerciseCalculator.ts";
 
 const app = express();
 
-app.get('/hello', (_req, res) => {
-  res.send('Hello fullstack!');
+app.get("/hello", (_req, res) => {
+  res.send("Hello fullstack!");
 });
 
-app.get('/bmi', (req, res) => {
-    try {
-        const height = req.query.height
-        const weight = req.query.weight
-        const bmi = calculateBmi(Number(height), Number(weight))
-        res.json({
-            weight: weight,
-            height: height,
-            bmi: bmi
-        })
-    } catch (error: unknown) {
-        let errorMessage = 'Something went wrong'
-        if (error instanceof Error) {
-            errorMessage += ' Error: ' + error.message;
-        }
-        res.status(400).json({
-            error: errorMessage
-        })
+app.get("/bmi", (req, res) => {
+  try {
+    const height = req.query.height;
+    const weight = req.query.weight;
+    const bmi = calculateBmi(Number(height), Number(weight));
+    res.json({
+      weight: weight,
+      height: height,
+      bmi: bmi,
+    });
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
     }
+    res.status(400).json({
+      error: errorMessage,
+    });
+  }
+});
+
+app.use(express.json());
+
+app.post("/exercises", (req, res) => {
+  const {daily_exercises, target} = req.body;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const exercise_numbers: number[] = daily_exercises.map((x: any) => Number(x));
+  try {
+    const result: unknown = calculateExercises(exercise_numbers, Number(target));
+    console.log("res", result);
+    return res.send(result);
+  } catch (error: unknown) {
+    let errorMessage = "Something went wrong";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    res.status(400).json({
+      error: errorMessage,
+    });
+  }
+  return console.log("what");
 });
 
 const PORT = 3003;

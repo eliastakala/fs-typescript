@@ -10,7 +10,7 @@ interface Output {
   average: number;
 }
 
-const calculateExercises = (data: number[], target: number): Output => {
+export const calculateExercises = (data: number[], target: number): Output => {
   const periodLength = data.length;
   const trainingDays = data.filter((x) => x > 0).length;
   const avg = data.reduce((a, b) => a + b) / data.length;
@@ -30,14 +30,14 @@ const calculateExercises = (data: number[], target: number): Output => {
 };
 
 try {
-  const data = parseData(process.argv)
-  const target: number = data.shift() ?? 0
-  const res = calculateExercises(data, target)
-  console.log(res)
+  const data = parseData(process.argv);
+  const target: number = data.shift() ?? 0;
+  const res = calculateExercises(data, target);
+  console.log(res);
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened'
+  let errorMessage = "Something bad happened";
   if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message
+    errorMessage += " Error: " + error.message;
   }
-  console.log(errorMessage)
+  console.log(errorMessage);
 }
