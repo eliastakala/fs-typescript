@@ -3,7 +3,7 @@ interface BmiValues {
     height: number;
     weight: number;
 }
-  
+
 export const parseArguments = (args: string[]): BmiValues => {
     if (args.length < 4) throw new Error('Not enough arguments');
     if (args.length > 4) throw new Error('Too many arguments');
@@ -17,6 +17,9 @@ export const parseArguments = (args: string[]): BmiValues => {
       throw new Error('Provided values were not numbers!');
     }
 }
+
+export const isNotNumber = (argument: any): boolean =>
+    isNaN(Number(argument));
 
 export const parseData = (args: string[]): number[] => {
     if (args.length < 4) throw new Error('Not enough arguments');
@@ -49,5 +52,3 @@ export const calculateRating = (avg: number, target: number): number => {
     }
     return 1;
 };
-
-export default "this is the default..."

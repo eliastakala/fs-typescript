@@ -1,7 +1,9 @@
-import { parseArguments } from "./utils.ts"
+import { isNotNumber, parseArguments } from "./utils.ts"
 
-
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
+  if (isNotNumber(height) || isNotNumber(weight)) {
+    throw new Error('Malformatted parameters');
+  } else {
   const bmi = weight / (height / 100) ** 2;
   if (bmi > 40) {
     return "Obese (Class III)"
@@ -19,16 +21,20 @@ const calculateBmi = (height: number, weight: number): string => {
     return "Underweight (Mild thinness)"
   }
   return "Normal range"
+}
 };
 
-try {
-  const { height, weight } = parseArguments(process.argv)
-  const res = calculateBmi(height, weight)
-  console.log(res)
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened'
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message
+if (process.argv[1] === import.meta.filename) {
+  try {
+    const { height, weight } = parseArguments(process.argv)
+    const res = calculateBmi(height, weight)
+    console.log(res)
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened'
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message
+    }
+    console.log(errorMessage)
   }
-  console.log(errorMessage)
 }
+
