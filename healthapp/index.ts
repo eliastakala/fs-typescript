@@ -18,9 +18,13 @@ app.get('/bmi', (req, res) => {
             height: height,
             bmi: bmi
         })
-    } catch (error: any) {
-        res.json({
-            error: error.message
+    } catch (error: unknown) {
+        let errorMessage = 'Something went wrong'
+        if (error instanceof Error) {
+            errorMessage += ' Error: ' + error.message;
+        }
+        res.status(400).json({
+            error: errorMessage
         })
     }
 });
