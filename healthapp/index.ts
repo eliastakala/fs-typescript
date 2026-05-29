@@ -32,23 +32,36 @@ app.get("/bmi", (req, res) => {
 app.use(express.json());
 
 app.post("/exercises", (req, res) => {
-  const {daily_exercises, target} = req.body;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const exercise_numbers: number[] = daily_exercises.map((x: any) => Number(x));
   try {
-    const result: unknown = calculateExercises(exercise_numbers, Number(target));
+    const { daily_exercises, target } = req.body;
+    if (daily_exercises === undefined || target === undefined) {
+      console.log("toimiiks");
+      return res.status(400).json({
+        error: "parameters missing",
+      });
+    }
+
+    console.log("testi", daily_exercises, target);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const exercise_numbers: number[] = daily_exercises.map((x: any) =>
+      Number(x),
+    );
+    const result: unknown = calculateExercises(
+      exercise_numbers,
+      Number(target),
+    );
     console.log("res", result);
     return res.send(result);
   } catch (error: unknown) {
+    console.log('ollaan errorissa')
     let errorMessage = "Something went wrong";
     if (error instanceof Error) {
       errorMessage += " Error: " + error.message;
     }
-    res.status(400).json({
+    return res.status(400).json({
       error: errorMessage,
     });
   }
-  return console.log("what");
 });
 
 const PORT = 3003;

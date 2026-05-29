@@ -1,4 +1,4 @@
-import { parseData, feedback, calculateRating } from "./utils.ts";
+import { parseData, feedback, calculateRating, isNotNumber } from "./utils.ts";
 
 interface Output {
   periodLength: number;
@@ -11,6 +11,9 @@ interface Output {
 }
 
 export const calculateExercises = (data: number[], target: number): Output => {
+  if (isNotNumber(target) || data.filter(x => !isNotNumber(x)).length < data.length) {
+    throw new Error("Malformatted parameters");
+  }
   const periodLength = data.length;
   const trainingDays = data.filter((x) => x > 0).length;
   const avg = data.reduce((a, b) => a + b) / data.length;
