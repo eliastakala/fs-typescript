@@ -2,7 +2,7 @@ import { isNotNumber, parseArguments } from "./utils.ts";
 
 export const calculateBmi = (height: number, weight: number): string => {
   if (isNotNumber(height) || isNotNumber(weight)) {
-    throw new Error("Malformatted parameters");
+    throw new Error("malformatted parameters");
   } else {
     const bmi = weight / (height / 100) ** 2;
     if (bmi > 40) {

@@ -5,23 +5,23 @@ import { calculateExercises } from "./exerciseCalculator.ts";
 const app = express();
 
 app.get("/hello", (_req, res) => {
-  res.send("Hello fullstack!");
+  res.send("Hello Full Stack!");
 });
 
 app.get("/bmi", (req, res) => {
   try {
-    const height = req.query.height;
-    const weight = req.query.weight;
-    const bmi = calculateBmi(Number(height), Number(weight));
+    const height = Number(req.query.height);
+    const weight = Number(req.query.weight);
+    const bmi = calculateBmi(height, weight);
     res.json({
       weight: weight,
       height: height,
       bmi: bmi,
     });
   } catch (error: unknown) {
-    let errorMessage = "Something went wrong";
+    let errorMessage = "";
     if (error instanceof Error) {
-      errorMessage += " Error: " + error.message;
+      errorMessage += error.message;
     }
     res.status(400).json({
       error: errorMessage,
@@ -50,9 +50,9 @@ app.post("/exercises", (req, res) => {
     );
     return res.send(result);
   } catch (error: unknown) {
-    let errorMessage = "Something went wrong";
+    let errorMessage = "";
     if (error instanceof Error) {
-      errorMessage += " Error: " + error.message;
+      errorMessage += error.message;
     }
     return res.status(400).json({
       error: errorMessage,
@@ -60,7 +60,7 @@ app.post("/exercises", (req, res) => {
   }
 });
 
-const PORT = 3003;
+const PORT = 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

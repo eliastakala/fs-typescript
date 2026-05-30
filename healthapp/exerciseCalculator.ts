@@ -12,7 +12,7 @@ interface Output {
 
 export const calculateExercises = (data: number[], target: number): Output => {
   if (isNotNumber(target) || data.filter(x => !isNotNumber(x)).length < data.length) {
-    throw new Error("Malformatted parameters");
+    throw new Error("malformatted parameters");
   }
   const periodLength = data.length;
   const trainingDays = data.filter((x) => x > 0).length;
