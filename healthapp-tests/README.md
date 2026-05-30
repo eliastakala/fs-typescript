@@ -1,6 +1,6 @@
 # Health App E2E Tests
 
-End-to-end tests for the Health App API using Playwright.
+End-to-end tests for the Health App API using Playwright. testing 
 
 ## Prerequisites
 
