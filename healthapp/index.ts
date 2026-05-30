@@ -35,13 +35,11 @@ app.post("/exercises", (req, res) => {
   try {
     const { daily_exercises, target } = req.body;
     if (daily_exercises === undefined || target === undefined) {
-      console.log("toimiiks");
       return res.status(400).json({
         error: "parameters missing",
       });
     }
 
-    console.log("testi", daily_exercises, target);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const exercise_numbers: number[] = daily_exercises.map((x: any) =>
       Number(x),
@@ -50,10 +48,8 @@ app.post("/exercises", (req, res) => {
       exercise_numbers,
       Number(target),
     );
-    console.log("res", result);
     return res.send(result);
   } catch (error: unknown) {
-    console.log('ollaan errorissa')
     let errorMessage = "Something went wrong";
     if (error instanceof Error) {
       errorMessage += " Error: " + error.message;
