@@ -1,4 +1,4 @@
-import { type NewPatient } from './types.ts';
+import { type NewPatient, Gender } from './types.ts';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -12,6 +12,17 @@ const parseText = (inputText: unknown): string => {
   return inputText;
 };
 
+const isGender = (param: string): param is Gender => {
+  return (Object.values(Gender) as string[]).includes(param);
+};
+
+const parseGender = (gender: unknown): Gender => {
+  if (!isString(gender) || !isGender(gender)) {
+    throw new Error('Incorrect or missing weather: ' + gender);
+  }
+  return gender;
+};
+
 const parseNewPatient = (object: unknown): NewPatient => {
    if ( !object || typeof object !== 'object' ) {
     throw new Error('Incorrect or missing data');
@@ -22,7 +33,7 @@ const parseNewPatient = (object: unknown): NewPatient => {
       name: parseText(object.name),
       dateOfBirth: parseText(object.dateOfBirth),
       ssn: parseText(object.ssn),
-      gender: parseText(object.gender),
+      gender: parseGender(object.gender),
       occupation: parseText(object.occupation),
     };
 
