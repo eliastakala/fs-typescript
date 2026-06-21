@@ -4,6 +4,7 @@
     "noEmit": true,
     "module": "nodenext",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
     "strict" : true,
     "noUnusedLocals": true,
