@@ -72,7 +72,7 @@ const App = () => {
   const [newDiaryDate, setNewDiaryDate] = useState("");
   const [newDiaryWeather, setNewDiaryWeather] = useState<Weather | null>(null);
   const [newDiaryVisibility, setNewDiaryVisibility] = useState<Visibility | null>(null);
-  const [newDiaryComment, setNewDiaryComment] = useState("faaah");
+  const [newDiaryComment, setNewDiaryComment] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
