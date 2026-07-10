@@ -92,7 +92,7 @@ const App = () => {
     event.preventDefault();
 
     if (newDiaryVisibility === null || newDiaryWeather === null) {
-      setErrorMessage("populate weather data")
+      errorSetting("populate weather data")
       return;
     }
 
