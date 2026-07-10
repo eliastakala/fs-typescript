@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import diaryService from "./services/diaryService";
 import "./App.css";
 
-const Notification = ({ message }) => {
+type NotificationProps = {
+  message: string | null;
+};
+
+const Notification = ({ message }: NotificationProps) => {
   if (message === null) {
     return null;
   }
@@ -16,7 +20,8 @@ const App = () => {
   const [newDiaryDate, setNewDiaryDate] = useState("");
   const [newDiaryWeather, setNewDiaryWeather] = useState("sunny");
   const [newDiaryVisibility, setNewDiaryVisibility] = useState("good");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [newDiaryComment, setNewDiaryComment] = useState("faaah");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     diaryService.getAll().then((initialEntries) => {
@@ -38,6 +43,7 @@ const App = () => {
         date: newDiaryDate,
         weather: newDiaryWeather,
         visibility: newDiaryVisibility,
+        comment: newDiaryComment,
       })
       .then((returnedEntry) => {
         console.log("täällä", returnedEntry);
@@ -45,12 +51,14 @@ const App = () => {
         setNewDiaryDate("");
         setNewDiaryWeather("");
         setNewDiaryVisibility("");
+        setNewDiaryComment("");
       })
       .catch((error) => {
         const submittedValues: Record<string, string> = {
           date: newDiaryDate,
           weather: newDiaryWeather, // "sunnya"
           visibility: newDiaryVisibility,
+          comment: newDiaryComment,
         };
         const constructedMessage =
           "Error: Incorrect " +
@@ -65,14 +73,7 @@ const App = () => {
 
   return (
     <div>
-      <ul>
-        {entries.map((entry) => (
-          <li key={entry.id}>
-            Flight date: {entry.date} weather was {entry.weather} and visibility{" "}
-            {entry.visibility}
-          </li>
-        ))}
-      </ul>
+      <h2>Add new entry</h2>
       <Notification message={errorMessage} />
       <form onSubmit={entryCreation}>
         Date:{" "}
@@ -92,8 +93,23 @@ const App = () => {
           value={newDiaryVisibility}
           onChange={(event) => setNewDiaryVisibility(event.target.value)}
         />
+        <br></br>
+        Comment:{" "}
+        <input
+          value={newDiaryComment}
+          onChange={(event) => setNewDiaryComment(event.target.value)}
+        />
         <button type="submit">add</button>
       </form>
+      <h2>Diary entries</h2>
+      {entries.map((entry) => (
+        <div key={entry.id}>
+          <h3>{entry.date}</h3>
+          visibility: {entry.visibility}
+          <br></br>
+          weather: {entry.weather}
+        </div>
+      ))}
     </div>
   );
 };

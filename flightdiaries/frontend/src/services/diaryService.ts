@@ -25,6 +25,7 @@ const getAll = async () => {
 const create = async (object: NewDiaryEntry) => {
   try {
     const response = await axios.post<DiaryEntry>(baseUrl, object);
+    console.log("servicessä", response)
     return response.data;
   } catch (error) {
     if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
