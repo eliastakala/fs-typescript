@@ -7,6 +7,22 @@ type NotificationProps = {
   message: string | null;
 };
 
+type Weather = "sunny" | "rainy" | "cloudy" | "stormy" | "windy";
+
+type WeatherProps = {
+  weather: Weather;
+  selectedWeather: Weather | null;
+  handleChange: (weather: Weather) => void;
+};
+
+type Visibility = "great" | "good" | "ok" | "poor";
+
+type VisibilityProps = {
+  visibility: Visibility;
+  selectedVisibility: Visibility | null;
+  handleChange: (visibility: Visibility) => void;
+};
+
 const Notification = ({ message }: NotificationProps) => {
   if (message === null) {
     return null;
@@ -15,11 +31,47 @@ const Notification = ({ message }: NotificationProps) => {
   return <div className="error">{message}</div>;
 };
 
+const WeatherRadio = ({ weather, selectedWeather, handleChange }: WeatherProps) => {
+  return (
+    <div>
+      <input
+        type="radio"
+        id={weather}
+        name="weather"
+        value={weather}
+        checked={selectedWeather === weather}
+        onChange={() => handleChange(weather)}
+      />
+      <label htmlFor={weather}>
+        {weather}
+      </label>
+    </div>
+  );
+};
+
+const VisibilityRadio = ({ visibility, selectedVisibility,handleChange }: VisibilityProps) => {
+  return (
+    <div>
+      <input
+        type="radio"
+        id={visibility}
+        name="visibility"
+        value={visibility}
+        checked={selectedVisibility === visibility}
+        onChange={() => handleChange(visibility)}
+      />
+      <label htmlFor={visibility}>
+        {visibility}
+      </label>
+    </div>
+  );
+};
+
 const App = () => {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [newDiaryDate, setNewDiaryDate] = useState("");
-  const [newDiaryWeather, setNewDiaryWeather] = useState("sunny");
-  const [newDiaryVisibility, setNewDiaryVisibility] = useState("good");
+  const [newDiaryWeather, setNewDiaryWeather] = useState<Weather | null>(null);
+  const [newDiaryVisibility, setNewDiaryVisibility] = useState<Visibility | null>(null);
   const [newDiaryComment, setNewDiaryComment] = useState("faaah");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -38,6 +90,12 @@ const App = () => {
 
   const entryCreation = (event: React.SyntheticEvent) => {
     event.preventDefault();
+
+    if (newDiaryVisibility === null || newDiaryWeather === null) {
+      setErrorMessage("populate weather data")
+      return;
+    }
+
     diaryService
       .create({
         date: newDiaryDate,
@@ -49,8 +107,8 @@ const App = () => {
         console.log("täällä", returnedEntry);
         setEntries(entries.concat(returnedEntry));
         setNewDiaryDate("");
-        setNewDiaryWeather("");
-        setNewDiaryVisibility("");
+        setNewDiaryWeather(null);
+        setNewDiaryVisibility(null);
         setNewDiaryComment("");
       })
       .catch((error) => {
@@ -71,28 +129,42 @@ const App = () => {
       });
   };
 
+  const handleWeatherClick = (props: Weather) => {
+    return setNewDiaryWeather(props);
+  };
+
+  const handleVisibilityClick = (props: Visibility) => {
+    return setNewDiaryVisibility(props);
+  };
+
   return (
     <div>
       <h2>Add new entry</h2>
       <Notification message={errorMessage} />
       <form onSubmit={entryCreation}>
-        Date:{" "}
-        <input
-          value={newDiaryDate}
-          onChange={(event) => setNewDiaryDate(event.target.value)}
-        />
+        <label>
+          Date:{" "}
+          <input
+            type="date"
+            name="diaryDate"
+            onChange={(event) => {
+              setNewDiaryDate(event.target.value);
+            }}
+          />
+        </label>
         <br></br>
-        Weather:{" "}
-        <input
-          value={newDiaryWeather}
-          onChange={(event) => setNewDiaryWeather(event.target.value)}
-        />
+        Weather: <br></br>
+        <WeatherRadio weather="sunny" selectedWeather={newDiaryWeather} handleChange={handleWeatherClick}/>
+        <WeatherRadio weather="rainy" selectedWeather={newDiaryWeather} handleChange={handleWeatherClick}/>
+        <WeatherRadio weather="cloudy" selectedWeather={newDiaryWeather} handleChange={handleWeatherClick}/>
+        <WeatherRadio weather="stormy" selectedWeather={newDiaryWeather} handleChange={handleWeatherClick}/>
+        <WeatherRadio weather="windy" selectedWeather={newDiaryWeather} handleChange={handleWeatherClick}/>
         <br></br>
         Visibility:{" "}
-        <input
-          value={newDiaryVisibility}
-          onChange={(event) => setNewDiaryVisibility(event.target.value)}
-        />
+        <VisibilityRadio visibility="great" selectedVisibility={newDiaryVisibility} handleChange={handleVisibilityClick}/>
+        <VisibilityRadio visibility="good" selectedVisibility={newDiaryVisibility} handleChange={handleVisibilityClick}/>
+        <VisibilityRadio visibility="ok" selectedVisibility={newDiaryVisibility} handleChange={handleVisibilityClick}/>
+        <VisibilityRadio visibility="poor" selectedVisibility={newDiaryVisibility} handleChange={handleVisibilityClick}/>
         <br></br>
         Comment:{" "}
         <input
