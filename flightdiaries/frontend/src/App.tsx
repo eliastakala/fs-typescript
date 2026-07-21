@@ -104,7 +104,6 @@ const App = () => {
         comment: newDiaryComment,
       })
       .then((returnedEntry) => {
-        console.log("täällä", returnedEntry);
         setEntries(entries.concat(returnedEntry));
         setNewDiaryDate("");
         setNewDiaryWeather(null);

@@ -10,6 +10,12 @@ router.get("/", (_req, res) => {
   res.send(data);
 });
 
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const data = patientService.getPatientById(id);
+  res.send(data);
+});
+
 router.post("/", (req, res) => {
   try {
     const newPatient = parseNewPatient(req.body);

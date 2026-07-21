@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import data from "../../data/patients.ts";
 import type {
-  NonSensitivePatientData,
+  NonSensitivePatient,
   Patient,
   NewPatient,
 } from "../../types.ts";
@@ -9,7 +9,7 @@ import { v1 as uuid } from "uuid";
 
 const patients = data;
 
-const getPatients = (): NonSensitivePatientData[] => {
+const getPatients = (): NonSensitivePatient[] => {
   return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -19,6 +19,10 @@ const getPatients = (): NonSensitivePatientData[] => {
   }));
 };
 
+const getPatientById = (id: string): Patient | undefined => {
+  return patients.find(patient => patient.id === id);
+};
+
 const addPatient = (entry: NewPatient): Patient => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const personId: string = uuid();
@@ -26,12 +30,11 @@ const addPatient = (entry: NewPatient): Patient => {
     id: personId,
     ...entry,
   };
-  console.log("new patient", newPatient);
-
   patients.push(newPatient);
   return newPatient;
 };
 export default {
   getPatients,
+  getPatientById,
   addPatient,
 };
