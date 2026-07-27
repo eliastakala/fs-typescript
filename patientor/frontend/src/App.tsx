@@ -22,6 +22,7 @@ const App = () => {
       setPatients(patients);
     };
     void fetchPatientList();
+
   }, []);
   
   return (

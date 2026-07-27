@@ -1,16 +1,12 @@
 // import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import { useParams } from "react-router-dom";
-import { Patient } from "../types";
-import { useEffect, useState } from "react";
-import {
-  Container,
-  Typography,
-  List,
-  ListItem,
-} from "@mui/material";
+import { Diagnosis, Patient } from "../types";
+import { useEffect, useState, useMemo } from "react";
+import { Container, Typography, List, ListItem } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import diagnosisService from "../services/diagnoses";
 
 interface Props {
   getPatient: (id: string) => Promise<Patient>;
@@ -18,14 +14,27 @@ interface Props {
 
 const PatientInfo = ({ getPatient }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+
   const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    void diagnosisService.getAll().then(setDiagnoses);
+  }, []);
 
   useEffect(() => {
     if (!id) return;
     void getPatient(id).then(setPatient);
   }, [id, getPatient]);
 
+  const byCode = useMemo(
+    () => new Map(diagnoses.map((d) => [d.code.toUpperCase(), d])),
+    [diagnoses],
+  );
+
   if (!patient) return <div>loading…</div>;
+
+  console.log("diagnoses", diagnoses);
 
   const genderIcons = {
     male: <MaleIcon />,
@@ -59,8 +68,13 @@ const PatientInfo = ({ getPatient }: Props) => {
             </Typography>
             <List sx={{ listStyleType: "disc", pl: 4 }}>
               {entry.diagnosisCodes?.map((code) => (
-                <ListItem key={code} sx={{ display: "list-item", fontSize: "1.5rem" }}>
-                  {code}
+                <ListItem
+                  key={code}
+                  sx={{ display: "list-item", fontSize: "1.5rem" }}
+                >
+                  <Typography sx={{ fontSize: "1.5rem" }}>
+                    {code} {byCode.get(code)?.name}
+                  </Typography>
                 </ListItem>
               ))}
             </List>
@@ -71,13 +85,4 @@ const PatientInfo = ({ getPatient }: Props) => {
   );
 };
 
-// {blogs.map((blog) => (
-//             <TableRow key={blog.id}>
-//               <TableCell>
-//                 <Link to={`/blogs/${blog.id}`}>
-//                   {blog.title} {blog.author}
-//                 </Link>
-//               </TableCell>
-//             </TableRow>
-//           ))}
 export default PatientInfo;

@@ -10,7 +10,7 @@ import {
   TableBody,
 } from "@mui/material";
 import axios from "axios";
-import { BrowserRouter as Router, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
