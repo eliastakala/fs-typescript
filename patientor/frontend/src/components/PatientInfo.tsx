@@ -26,7 +26,7 @@ type RatingProps = {
   rating: number;
 };
 
-const HealthRating = ({ rating }: RatingProps ) => {
+const HealthRating = ({ rating }: RatingProps) => {
   switch (rating) {
     case 0:
       return <FavoriteIcon style={{ color: "green" }} />;
@@ -119,6 +119,30 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
   }
 };
 
+const genderIcons = {
+    male: <MaleIcon />,
+    female: <FemaleIcon />,
+    other: <TransgenderIcon />,
+  };
+
+const BasicInfo = ({ patient }: { patient: Patient }) => {
+  return (
+    <div>
+      <Typography variant="h4" sx={{ marginBottom: "0.5em" }}>
+        {patient.name} {genderIcons[patient.gender] ?? <TransgenderIcon />}
+      </Typography>
+
+      <Typography sx={{ fontSize: "1.5rem" }}>ssn: {patient.ssn}</Typography>
+      <Typography sx={{ fontSize: "1.5rem" }}>
+        occupation: {patient.occupation}
+      </Typography>
+      <Typography sx={{ fontSize: "1.5rem" }}>
+        date of birth: {patient.dateOfBirth}
+      </Typography>
+    </div>
+  );
+};
+
 const PatientInfo = ({ getPatient }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
@@ -141,26 +165,10 @@ const PatientInfo = ({ getPatient }: Props) => {
 
   if (!patient) return <div>loading…</div>;
 
-  const genderIcons = {
-    male: <MaleIcon />,
-    female: <FemaleIcon />,
-    other: <TransgenderIcon />,
-  };
-
   return (
     <div className="Patient">
       <Container>
-        <Typography variant="h4" sx={{ marginBottom: "0.5em" }}>
-          {patient.name} {genderIcons[patient.gender] ?? <TransgenderIcon />}
-        </Typography>
-
-        <Typography sx={{ fontSize: "1.5rem" }}>ssn: {patient.ssn}</Typography>
-        <Typography sx={{ fontSize: "1.5rem" }}>
-          occupation: {patient.occupation}
-        </Typography>
-        <Typography sx={{ fontSize: "1.5rem" }}>
-          date of birth: {patient.dateOfBirth}
-        </Typography>
+        <BasicInfo patient={patient} />
         <Typography variant="h4" sx={{ marginBottom: "0.5em" }}>
           entries
         </Typography>
