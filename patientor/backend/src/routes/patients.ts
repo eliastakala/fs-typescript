@@ -16,6 +16,12 @@ router.get("/:id", (req, res) => {
   res.send(data);
 });
 
+router.post("/:id/entries", (req, res) => {
+  const { id } = req.params;
+  const modifiedPatient = patientService.addEntry(id, req.body)
+  res.json(modifiedPatient);
+});
+
 router.post("/", (req, res) => {
   try {
     const newPatient = parseNewPatient(req.body);
