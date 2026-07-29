@@ -7,6 +7,7 @@ import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import diagnosisService from "../services/diagnoses";
+import Paper from "@mui/material/Paper";
 
 interface Props {
   getPatient: (id: string) => Promise<Patient>;
@@ -63,21 +64,26 @@ const PatientInfo = ({ getPatient }: Props) => {
         </Typography>
         {patient.entries.map((entry) => (
           <div key={entry.id}>
-            <Typography sx={{ fontSize: "1.5rem" }}>
-              {entry.date} {entry.description}
-            </Typography>
-            <List sx={{ listStyleType: "disc", pl: 4 }}>
-              {entry.diagnosisCodes?.map((code) => (
-                <ListItem
-                  key={code}
-                  sx={{ display: "list-item", fontSize: "1.5rem" }}
-                >
-                  <Typography sx={{ fontSize: "1.5rem" }}>
-                    {code} {byCode.get(code)?.name}
-                  </Typography>
-                </ListItem>
-              ))}
-            </List>
+            <Paper variant="outlined" sx={{ p: 2, mb: 1 }}>
+              <Typography sx={{ fontSize: "1.5rem" }}>
+                {entry.date} {entry.description}
+              </Typography>
+              <List sx={{ listStyleType: "disc", pl: 4 }}>
+                {entry.diagnosisCodes?.map((code) => (
+                  <ListItem
+                    key={code}
+                    sx={{ display: "list-item", fontSize: "1.5rem" }}
+                  >
+                    <Typography sx={{ fontSize: "1.5rem" }}>
+                      {code} {byCode.get(code)?.name}
+                    </Typography>
+                  </ListItem>
+                ))}
+              </List>
+              <Typography sx={{ fontSize: "1.5rem" }}>
+                diagnose by: {entry.specialist}
+              </Typography>
+            </Paper>
           </div>
         ))}
       </Container>
