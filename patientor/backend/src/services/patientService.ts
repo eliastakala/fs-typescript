@@ -30,6 +30,7 @@ const addPatient = (entry: NewPatient): Patient => {
   const newPatient = {
     id: personId,
     ...entry,
+    entries: []
   };
   patients.push(newPatient);
   return newPatient;

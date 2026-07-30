@@ -1,7 +1,7 @@
 import express from "express";
 import patientService from "../services/patientService.ts";
-import parseNewPatient from "../../utils.ts";
 import { z } from "zod";
+import { parseNewPatient, parseNewEntry } from "../../utils.ts";
 
 const router = express.Router();
 
@@ -18,7 +18,8 @@ router.get("/:id", (req, res) => {
 
 router.post("/:id/entries", (req, res) => {
   const { id } = req.params;
-  const modifiedPatient = patientService.addEntry(id, req.body)
+  const newEntry = parseNewEntry(req.body);
+  const modifiedPatient = patientService.addEntry(id, newEntry)
   res.json(modifiedPatient);
 });
 
