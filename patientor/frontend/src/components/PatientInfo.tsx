@@ -2,7 +2,15 @@
 import { useParams } from "react-router-dom";
 import { Diagnosis, Patient, Entry } from "../types";
 import { useEffect, useState, useMemo } from "react";
-import { Container, Typography, List, ListItem } from "@mui/material";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  Button,
+  TextField,
+  Box,
+} from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -120,10 +128,10 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
 };
 
 const genderIcons = {
-    male: <MaleIcon />,
-    female: <FemaleIcon />,
-    other: <TransgenderIcon />,
-  };
+  male: <MaleIcon />,
+  female: <FemaleIcon />,
+  other: <TransgenderIcon />,
+};
 
 const BasicInfo = ({ patient }: { patient: Patient }) => {
   return (
@@ -146,6 +154,34 @@ const BasicInfo = ({ patient }: { patient: Patient }) => {
 const PatientInfo = ({ getPatient }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+  const [entryVisibility, setEntryVisibility] = useState<boolean>(false);
+
+  const [newDate, setNewDate] = useState<string>("");
+  const [newDescription, setNewDescription] = useState<string>("");
+  const [newSpecialist, setNewSpecialist] = useState<string>("");
+  const [newHealthCheckRating, setNewHealthCheckRating] = useState<string>("");
+  const [newDiagnosisCodes, setNewDiagnosisCodes] = useState<string>("");
+
+  const createEntry = (props) => {
+    console.log('propsit', props);
+  };
+
+  const addEntry = (event) => {
+    event.preventDefault();
+    createEntry({
+      date: newDate,
+      description: newSpecialist,
+      specialist: newSpecialist,
+      healthCheckRating: newHealthCheckRating,
+      diagnosisCodes: newDiagnosisCodes,
+    });
+    
+    setNewDate("");
+    setNewDescription("");
+    setNewSpecialist("");
+    setNewHealthCheckRating("");
+    setNewDiagnosisCodes("");
+  };
 
   const { id } = useParams<{ id: string }>();
 
@@ -165,6 +201,10 @@ const PatientInfo = ({ getPatient }: Props) => {
 
   if (!patient) return <div>loading…</div>;
 
+  const handleClick = () => {
+    setEntryVisibility(true);
+  };
+
   return (
     <div className="Patient">
       <Container>
@@ -181,6 +221,75 @@ const PatientInfo = ({ getPatient }: Props) => {
                 diagnose by {entry.specialist}
               </Typography>
             </Paper>
+            <Button variant="contained" onClick={handleClick}>
+              Add New Entry
+            </Button>
+            <Box
+              component="form"
+              onSubmit={addEntry}
+              sx={{
+                p: 2,
+                border: "1px dashed grey",
+                display: entryVisibility ? "flex" : "none",
+                gap: 2,
+                flexDirection: "column",
+              }}
+            >
+              <Typography sx={{ fontSize: "1.5rem" }}>
+                New Healthcheck Entry
+              </Typography>
+                <TextField
+                  id="outlined-basic"
+                  label="Date"
+                  variant="outlined"
+                  required
+                  value={newDate}
+                  onChange={(event) => {
+                    setNewDate(event.target.value);
+                  }}
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Description"
+                  variant="outlined"
+                  required
+                  value={newDescription}
+                  onChange={(event) => {
+                    setNewDescription(event.target.value);
+                  }}
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Specialist"
+                  variant="outlined"
+                  required
+                  value={newSpecialist}
+                  onChange={(event) => {
+                    setNewSpecialist(event.target.value);
+                  }}
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Health Check Rating (0-3)"
+                  variant="outlined"
+                  required
+                  value={newHealthCheckRating}
+                  onChange={(event) => {
+                    setNewHealthCheckRating(event.target.value);
+                  }}
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Diagnosis Codes (comma-separated)"
+                  variant="outlined"
+                  required
+                  value={newDiagnosisCodes}
+                  onChange={(event) => {
+                    setNewDiagnosisCodes(event.target.value);
+                  }}
+                />
+              <Button type="submit" variant="contained" sx={{ alignSelf: "flex-start" }}>Add</Button>
+            </Box>
           </div>
         ))}
       </Container>
