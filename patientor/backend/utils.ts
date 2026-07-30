@@ -1,4 +1,9 @@
-import { type NewPatient, Gender, HealthCheckRating, type EntryWithoutId } from "./types.ts";
+import {
+  type NewPatient,
+  Gender,
+  HealthCheckRating,
+  type EntryWithoutId,
+} from "./types.ts";
 import { z } from "zod";
 
 const newPatientEntry = z.object({

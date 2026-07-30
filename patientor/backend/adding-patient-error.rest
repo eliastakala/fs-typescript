@@ -5,6 +5,6 @@ Content-Type: application/json
 "name": "seppo McClane",
 "dateOfBirth": "1986-07-09",
 "ssn": "090786-122X",
-"gender": "male",
+"gender": 2,
 "occupation": "New york city cop"
 }

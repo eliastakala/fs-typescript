@@ -17,10 +17,18 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/:id/entries", (req, res) => {
-  const { id } = req.params;
-  const newEntry = parseNewEntry(req.body);
-  const modifiedPatient = patientService.addEntry(id, newEntry)
-  res.json(modifiedPatient);
+  try {
+    const { id } = req.params;
+    const newEntry = parseNewEntry(req.body);
+    const modifiedPatient = patientService.addEntry(id, newEntry);
+    res.json(modifiedPatient);
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      res.status(400).send({ error: error.issues });
+    } else {
+      res.status(400).send({ error: "unknown error" });
+    }
+  }
 });
 
 router.post("/", (req, res) => {
