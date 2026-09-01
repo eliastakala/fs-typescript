@@ -162,11 +162,11 @@ const PatientInfo = ({ getPatient }: Props) => {
   const [newHealthCheckRating, setNewHealthCheckRating] = useState<string>("");
   const [newDiagnosisCodes, setNewDiagnosisCodes] = useState<string>("");
 
-  const createEntry = (props) => {
+  const createEntry = (props: { date: string; description: string; specialist: string; healthCheckRating: string; diagnosisCodes: string; }) => {
     console.log('propsit', props);
   };
 
-  const addEntry = (event) => {
+  const addEntry = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     createEntry({
       date: newDate,
